@@ -1,4 +1,4 @@
-package com.example.molys.mediumuserviewapplication
+package com.example.molys.mediumuserviewapplication.data
 
 import com.google.gson.annotations.SerializedName
 
