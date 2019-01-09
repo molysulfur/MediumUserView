@@ -22,33 +22,38 @@ class MainActivity : AppCompatActivity(){
     private var userId = ""
     private var listPublication = ArrayList<Publication>()
     private lateinit var userProfile : Profile
+    private lateinit var callService : MediumService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        init()
+    }
+
+    private fun init() {
         token = "Bearer " + intent.getStringExtra("token")
         val retrofit = Retrofit.Builder().baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        val callService = retrofit.create(MediumService::class.java)
+        callService = retrofit.create(MediumService::class.java)
         callService.getProfile(token).enqueue(object : Callback<DataProfile?> {
             override fun onFailure(call: Call<DataProfile?>, t: Throwable) {
                 t.printStackTrace()
-                Toast.makeText(this@MainActivity,"Error for Get Profile",Toast.LENGTH_SHORT)
+                Toast.makeText(this@MainActivity, "Error for Get Profile", Toast.LENGTH_SHORT)
             }
 
             override fun onResponse(call: Call<DataProfile?>, response: Response<DataProfile?>) {
                 userId = response.body()!!.data.id
                 userProfile = response.body()!!.data
-                callService.getPublicationsWithClientId(token,userId).enqueue(object: Callback<DataPublication?> {
+                callService.getPublicationsWithClientId(token, userId).enqueue(object : Callback<DataPublication?> {
                     override fun onFailure(call: Call<DataPublication?>, t: Throwable) {
                         t.printStackTrace()
-                        Toast.makeText(this@MainActivity,"Error for Get Publication",Toast.LENGTH_LONG)
+                        Toast.makeText(this@MainActivity, "Error for Get Publication", Toast.LENGTH_LONG)
                     }
 
                     override fun onResponse(call: Call<DataPublication?>, response: Response<DataPublication?>) {
                         response.body()!!.data.forEach {
-                            isEditorOrWriter(it,callService)
+                            isEditorOrWriter(it)
                         }
                     }
                 })
@@ -56,7 +61,7 @@ class MainActivity : AppCompatActivity(){
         })
     }
 
-    private fun isEditorOrWriter(publication: Publication, callService: MediumService) {
+    private fun isEditorOrWriter(publication: Publication) {
         callService.getPublicationWithId(token,publication.id).enqueue(object: Callback<DataContributors?> {
             override fun onFailure(call: Call<DataContributors?>, t: Throwable) {
                 t.printStackTrace()

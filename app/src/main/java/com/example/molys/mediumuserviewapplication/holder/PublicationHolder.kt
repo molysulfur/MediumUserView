@@ -1,5 +1,7 @@
 package com.example.molys.mediumuserviewapplication.holder
 
+import android.content.Intent
+import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.Button
@@ -20,5 +22,10 @@ class PublicationHolder(val view : View) : RecyclerView.ViewHolder(view){
         Glide.with(view.context).load(publication.imageUrl).into(imgPublication)
         tvPublicationName.text = publication.name
         tvPublicationDescription.text = publication.description
+        btnPage.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(publication.url)
+            view.context.startActivity(intent)
+        }
     }
 }
