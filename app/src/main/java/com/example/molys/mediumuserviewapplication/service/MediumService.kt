@@ -1,11 +1,10 @@
 package com.example.molys.mediumuserviewapplication.service
 
-import com.example.molys.mediumuserviewapplication.data.DataProfile
-import com.example.molys.mediumuserviewapplication.data.AccessToken
+import com.example.molys.mediumuserviewapplication.data.*
 import retrofit2.Call
 import retrofit2.http.*
 
-interface OauthService {
+interface MediumService {
 
     @Headers("Content-Type: application/x-www-form-urlencoded",
         "Accept: application/json",
@@ -23,9 +22,9 @@ interface OauthService {
     fun getProfile(@Header("Authorization") token: String) : Call<DataProfile>
 
     @GET("users/{client_id}/publications")
-    fun getPublicationsWithClientId(@Header("Authorization") token: String,@Path("client_id") clientId: String) : Call<DataProfile>
+    fun getPublicationsWithClientId(@Header("Authorization") token: String,@Path("client_id") clientId: String) : Call<DataPublication>
 
     @GET("publications/{publication_id}/contributors")
-    fun getPublicationWithId(@Header("Authorization") token: String,@Path("publication_id") publicationId: String) : Call<DataProfile>
+        fun getPublicationWithId(@Header("Authorization") token: String,@Path("publication_id") publicationId: String) : Call<DataContributors>
 
 }

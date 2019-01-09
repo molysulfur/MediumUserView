@@ -5,7 +5,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.example.molys.mediumuserviewapplication.data.AccessToken
-import com.example.molys.mediumuserviewapplication.service.OauthService
+import com.example.molys.mediumuserviewapplication.service.MediumService
+import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,14 +26,21 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        if (intent.data != null){
-            getAuthToken()
-        }else {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse("https://medium.com/m/oauth/authorize?client_id=$CLIENT_ID&scope=basicProfile,publishPost&state=200&response_type=code&redirect_uri=$REDIRECT_URI")
-            startActivity(intent)
-        }
+        init()
 
+    }
+
+    private fun init() {
+        if (intent.data != null) {
+            getAuthToken()
+        } else {
+            btn_login.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data =
+                        Uri.parse("https://medium.com/m/oauth/authorize?client_id=$CLIENT_ID&scope=basicProfile,publishPost&state=200&response_type=code&redirect_uri=$REDIRECT_URI")
+                startActivity(intent)
+            }
+        }
     }
 
     private fun getAuthToken() {
@@ -42,7 +50,7 @@ class LoginActivity : AppCompatActivity() {
         val retrofit = Retrofit.Builder().baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        val accessTokenService = retrofit.create(OauthService::class.java)
+        val accessTokenService = retrofit.create(MediumService::class.java)
             .getAccessToken(
                 code, CLIENT_ID,
                 CLIENT_SECRET,
@@ -55,23 +63,13 @@ class LoginActivity : AppCompatActivity() {
             }
             override fun onResponse(call: Call<AccessToken?>, response: Response<AccessToken?>) {
                 token = response.body()!!.accessToken
-                val intent = Intent(this@LoginActivity,MainActivity::class.java)
+                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                intent.putExtra("token", token)
                 startActivity(intent)
                 finish()
             }
         })
 
-//        val callProfile = retrofit.create(OauthService::class.java)
-//            .getProfile("Bearer " + token)
-//        callProfile.enqueue(object : Callback<DataProfile?> {
-//            override fun onFailure(call: Call<DataProfile?>, t: Throwable) {
-//                t.printStackTrace()
-//            }
-//
-//            override fun onResponse(call: Call<DataProfile?>, response: Response<DataProfile?>) {
-//
-//            }
-//        })
 
     }
 
