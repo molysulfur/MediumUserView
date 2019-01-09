@@ -2,13 +2,13 @@ package com.example.molys.mediumuserviewapplication
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.widget.Toast
-import com.example.molys.mediumuserviewapplication.data.DataContributors
-import com.example.molys.mediumuserviewapplication.data.DataProfile
-import com.example.molys.mediumuserviewapplication.data.DataPublication
-import com.example.molys.mediumuserviewapplication.data.Publication
+import com.example.molys.mediumuserviewapplication.adapter.MediumAdapter
+import com.example.molys.mediumuserviewapplication.data.*
 import com.example.molys.mediumuserviewapplication.service.MediumService
+import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity(){
     private val BASE_URL = "https://api.medium.com/v1/"
     private var userId = ""
     private var listPublication = ArrayList<Publication>()
+    private lateinit var userProfile : Profile
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity(){
 
             override fun onResponse(call: Call<DataProfile?>, response: Response<DataProfile?>) {
                 userId = response.body()!!.data.id
+                userProfile = response.body()!!.data
                 callService.getPublicationsWithClientId(token,userId).enqueue(object: Callback<DataPublication?> {
                     override fun onFailure(call: Call<DataPublication?>, t: Throwable) {
                         t.printStackTrace()
@@ -67,6 +69,11 @@ class MainActivity : AppCompatActivity(){
                         listPublication.add(publication)
                     }
                     Log.e("response",listPublication.toString())
+
+                    recycler_main.apply {
+                        layoutManager = LinearLayoutManager(this@MainActivity)
+                        adapter = MediumAdapter(MediumCreator.toBaseItem(userProfile,listPublication))
+                    }
                 }
             }
         })
