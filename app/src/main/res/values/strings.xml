@@ -2,4 +2,5 @@
     <string name="app_name">MediumUserViewApplication</string>
     <string name="publication_see">See Publication</string>
     <string name="signin">Sign in with Medium</string>
+    <string name="publication">Publication</string>
 </resources>

@@ -9,4 +9,10 @@
     <dimen name="dim_172dp">172dp</dimen>
     <dimen name="dim_16dp">16dp</dimen>
     <dimen name="dim_200dp">200dp</dimen>
+    <dimen name="dim_18sp">18sp</dimen>
+    <dimen name="dim_96dp">96dp</dimen>
+    <dimen name="dim_12sp">12sp</dimen>
+    <dimen name="dim_1dp">1dp</dimen>
+    <dimen name="dim_56dp">56dp</dimen>
+    <dimen name="dim_20sp">20dp</dimen>
 </resources>

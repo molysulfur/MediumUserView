@@ -7,6 +7,7 @@ import com.example.molys.mediumuserviewapplication.MediumCreator
 import com.example.molys.mediumuserviewapplication.R
 import com.example.molys.mediumuserviewapplication.holder.ProfileHolder
 import com.example.molys.mediumuserviewapplication.holder.PublicationHolder
+import com.example.molys.mediumuserviewapplication.holder.TitleHolder
 import com.example.molys.mediumuserviewapplication.items.BaseItem
 import com.example.molys.mediumuserviewapplication.items.ProfileItem
 import com.example.molys.mediumuserviewapplication.items.PublicationItem
@@ -21,6 +22,10 @@ class MediumAdapter(private val listBaseItem: List<BaseItem>) : RecyclerView.Ada
             MediumCreator.TYPE_PUBLICATION -> {
                 val publication = LayoutInflater.from(viewGroup.context).inflate(R.layout.layout_publication,viewGroup,false)
                 return PublicationHolder(publication)
+            }
+            MediumCreator.TYPE_TITLE_PUBLICATION -> {
+                val title = LayoutInflater.from(viewGroup.context).inflate(R.layout.layout_title,viewGroup,false)
+                return TitleHolder(title)
             }
             else -> return super.createViewHolder(viewGroup,type)
         }
@@ -41,6 +46,8 @@ class MediumAdapter(private val listBaseItem: List<BaseItem>) : RecyclerView.Ada
             getItemViewType(position) == MediumCreator.TYPE_PUBLICATION ->{
                 val profile = viewHolder as PublicationHolder
                 viewHolder.onBind(listBaseItem[position] as PublicationItem)
+            }
+            getItemViewType(position) == MediumCreator.TYPE_TITLE_PUBLICATION ->{
             }
         }
     }
