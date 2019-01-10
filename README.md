@@ -18,7 +18,7 @@ Import the project to folder into your IDE (tested on Android Studio), then run 
 * Start Android Studio
 
 # Reference
-https://github.com/Medium/medium-api-docs
-https://github.com/bumptech/glide
-https://square.github.io/retrofit/
-https://github.com/hdodenhof/CircleImageView
+* https://github.com/Medium/medium-api-docs
+* https://github.com/bumptech/glide
+* https://square.github.io/retrofit/
+* https://github.com/hdodenhof/CircleImageView
