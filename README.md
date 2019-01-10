@@ -3,7 +3,7 @@ MediumUserView is moblie application. using oauth for get json api from medium f
 
 # Service and Libraries Used
 * [Glide](https://github.com/bumptech/glide) for image loading
-* [retrofit](https://square.github.io/retrofit/) for call api
+* [Retrofit](https://square.github.io/retrofit/) for call api
 * [circleimageview](https://github.com/hdodenhof/CircleImageView) for set image view like a circle
 * [medium-api-docs](https://github.com/Medium/medium-api-docs) for Authentication and get json data to this application
 
@@ -19,3 +19,6 @@ Import the project to folder into your IDE (tested on Android Studio), then run 
 
 # Reference
 https://github.com/Medium/medium-api-docs
+https://github.com/bumptech/glide
+https://square.github.io/retrofit/
+https://github.com/hdodenhof/CircleImageView
