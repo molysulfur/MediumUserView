@@ -12,7 +12,7 @@ MediumUserView is moblie application. using oauth for get json api from medium f
 ![2](https://user-images.githubusercontent.com/40534697/50953675-b7313600-14e6-11e9-88f8-df7f6b2ec4f9.PNG)
 ![3](https://user-images.githubusercontent.com/40534697/50953683-bd271700-14e6-11e9-96d1-0bab0706f290.PNG)
 
-# Useage
+# Usage
 Import the project to folder into your IDE (tested on Android Studio), then run project
 * clone `https://github.com/molysulfur/MediumUserView.git`
 * Start Android Studio
