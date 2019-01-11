@@ -5,44 +5,42 @@
                                              android:layout_width="match_parent"
                                              android:layout_height="wrap_content">
     <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/img_profile"
+            android:id="@+id/imgProfile"
             android:src="@mipmap/ic_launcher"
-            android:layout_margin="@dimen/dim_16dp"
-            android:layout_width="@dimen/dim_96dp"
-            android:layout_height="@dimen/dim_96dp"
+            android:layout_margin="@dimen/dimMarginParent"
+            android:layout_width="@dimen/dimImgProfile"
+            android:layout_height="@dimen/dimImgProfile"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
     <TextView
-            android:id="@+id/tv_username"
+            android:id="@+id/tvUsername"
             tools:text="majelbstoat"
-            android:textSize="@dimen/dim_16dp"
+            android:textSize="@dimen/dimDescription"
             android:layout_width="@dimen/dim_0dp"
             android:gravity="center"
             android:textColor="@color/baseTitle"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@+id/tv_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_name"
-            app:layout_constraintStart_toStartOf="@+id/tv_name"
+            app:layout_constraintEnd_toEndOf="@+id/tvName"
+            app:layout_constraintTop_toBottomOf="@+id/tvName"
+            app:layout_constraintStart_toStartOf="@+id/tvName"
             android:layout_marginBottom="@dimen/dim_16dp"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
 
     <TextView
-            android:id="@+id/tv_name"
+            android:id="@+id/tvName"
             tools:text="Jamie Talbot"
             android:textStyle="bold"
-            android:textSize="@dimen/dim_20sp"
+            android:textSize="@dimen/dimBaseTitle"
             android:gravity="center"
             android:padding="@dimen/dim_8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/baseBtnCard"
-            app:layout_constraintStart_toStartOf="@+id/img_profile"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintTop_toBottomOf="@+id/img_profile"
-            app:layout_constraintEnd_toEndOf="@+id/img_profile"
-            android:layout_marginBottom="8dp"/>
+            app:layout_constraintStart_toStartOf="@+id/imgProfile"
+            app:layout_constraintTop_toBottomOf="@+id/imgProfile"
+            app:layout_constraintEnd_toEndOf="@+id/imgProfile"/>
 
 </android.support.constraint.ConstraintLayout>

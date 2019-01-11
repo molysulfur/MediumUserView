@@ -14,5 +14,12 @@
     <dimen name="dim_12sp">12sp</dimen>
     <dimen name="dim_1dp">1dp</dimen>
     <dimen name="dim_56dp">56dp</dimen>
-    <dimen name="dim_20sp">20dp</dimen>
+    <dimen name="dim_20sp">20sp</dimen>
+    <!-- Base Dim Size App-->
+    <dimen name="dimBaseTitle">@dimen/dim_20sp</dimen>
+    <dimen name="dimImgProfile">@dimen/dim_96dp</dimen>
+    <dimen name="dimImgPublication">@dimen/dim_96dp</dimen>
+    <dimen name="dimDescription">@dimen/dim_16sp</dimen>
+    <dimen name="dimMarginParent">16sp</dimen>
+
 </resources>

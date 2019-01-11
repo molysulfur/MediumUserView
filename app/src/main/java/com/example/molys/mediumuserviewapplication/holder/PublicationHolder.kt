@@ -4,28 +4,24 @@ import android.content.Intent
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.example.molys.mediumuserviewapplication.R
 import com.example.molys.mediumuserviewapplication.items.PublicationItem
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.layout_publication.btnPage
+import kotlinx.android.synthetic.main.layout_publication.imgPublication
+import kotlinx.android.synthetic.main.layout_publication.tvPublicationDescription
+import kotlinx.android.synthetic.main.layout_publication.tvPublicationName
 
-class PublicationHolder(val view : View) : RecyclerView.ViewHolder(view){
-
-    private val imgPublication : ImageView = view.findViewById(R.id.img_publication)
-    private val tvPublicationName : TextView = view.findViewById(R.id.tv_publication_name)
-    private val tvPublicationDescription : TextView = view.findViewById(R.id.tv_publication_description)
-    private val btnPage : Button = view.findViewById(R.id.btn_page)
+class PublicationHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),LayoutContainer{
 
     fun onBind(publication: PublicationItem){
-        Glide.with(view.context).load(publication.imageUrl).into(imgPublication)
+        Glide.with(containerView.context).load(publication.imageUrl).into(imgPublication)
         tvPublicationName.text = publication.name
         tvPublicationDescription.text = publication.description
         btnPage.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(publication.url)
-            view.context.startActivity(intent)
+            containerView.context.startActivity(intent)
         }
     }
 }

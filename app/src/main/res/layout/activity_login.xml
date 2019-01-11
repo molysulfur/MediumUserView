@@ -5,13 +5,14 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Button
-            android:id="@+id/btn_login"
+            android:id="@+id/btnLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/signin"
             android:padding="@dimen/dim_16dp"
             android:drawableLeft="@drawable/ic_medium"
             android:drawablePadding="@dimen/dim_16dp"
+            android:layout_margin="@dimen/dimMarginParent"
             android:backgroundTint="@color/colorWhite"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

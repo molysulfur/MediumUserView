@@ -7,9 +7,13 @@
                 android:id="@+id/tv_title_publication"
                 android:text="@string/publication"
                 android:padding="@dimen/dim_8dp"
-                android:background="#d6dae1"
+                android:background="@color/baseBgTitle"
                 android:textColor="@color/baseTitle"
-                android:textSize="@dimen/dim_18sp"
+                android:textSize="@dimen/dimBaseTitle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 </android.support.constraint.ConstraintLayout>

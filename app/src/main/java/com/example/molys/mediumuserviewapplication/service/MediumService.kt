@@ -25,6 +25,6 @@ interface MediumService {
     fun getPublicationsWithClientId(@Header("Authorization") token: String,@Path("client_id") clientId: String) : Call<DataPublication>
 
     @GET("publications/{publication_id}/contributors")
-        fun getPublicationWithId(@Header("Authorization") token: String,@Path("publication_id") publicationId: String) : Call<DataContributors>
+        fun getPublicationWithId(@Header("Authorization") token: String,@Path("publication_id") publicationId: String?) : Call<DataContributors>
 
 }

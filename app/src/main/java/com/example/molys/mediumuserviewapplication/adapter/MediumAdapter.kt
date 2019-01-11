@@ -14,20 +14,20 @@ import com.example.molys.mediumuserviewapplication.items.PublicationItem
 
 class MediumAdapter(private val listBaseItem: List<BaseItem>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     override fun onCreateViewHolder(viewGroup: ViewGroup, type: Int): RecyclerView.ViewHolder {
-        when(type){
+        return when(type){
             MediumCreator.TYPE_PROFILE -> {
                 val profile = LayoutInflater.from(viewGroup.context).inflate(R.layout.layout_profile,viewGroup,false)
-                return ProfileHolder(profile)
+                ProfileHolder(profile)
             }
             MediumCreator.TYPE_PUBLICATION -> {
                 val publication = LayoutInflater.from(viewGroup.context).inflate(R.layout.layout_publication,viewGroup,false)
-                return PublicationHolder(publication)
+                PublicationHolder(publication)
             }
             MediumCreator.TYPE_TITLE_PUBLICATION -> {
                 val title = LayoutInflater.from(viewGroup.context).inflate(R.layout.layout_title,viewGroup,false)
-                return TitleHolder(title)
+                TitleHolder(title)
             }
-            else -> return super.createViewHolder(viewGroup,type)
+            else -> super.createViewHolder(viewGroup,type)
         }
     }
 
@@ -40,14 +40,12 @@ class MediumAdapter(private val listBaseItem: List<BaseItem>) : RecyclerView.Ada
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
         when{
             getItemViewType(position) == MediumCreator.TYPE_PROFILE ->{
-                val profile = viewHolder as ProfileHolder
-                viewHolder.onBind(listBaseItem[position] as ProfileItem)
+                val profileHolder = viewHolder as ProfileHolder
+                profileHolder.onBind(listBaseItem[position] as ProfileItem)
             }
             getItemViewType(position) == MediumCreator.TYPE_PUBLICATION ->{
-                val profile = viewHolder as PublicationHolder
-                viewHolder.onBind(listBaseItem[position] as PublicationItem)
-            }
-            getItemViewType(position) == MediumCreator.TYPE_TITLE_PUBLICATION ->{
+                val publicationHolder = viewHolder as PublicationHolder
+                publicationHolder.onBind(listBaseItem[position] as PublicationItem)
             }
         }
     }

@@ -34,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
         if (intent.data != null) {
             getAuthToken()
         } else {
-            btn_login.setOnClickListener {
+            btnLogin.setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.data =
                         Uri.parse("https://medium.com/m/oauth/authorize?client_id=$CLIENT_ID&scope=basicProfile,publishPost&state=200&response_type=code&redirect_uri=$REDIRECT_URI")
@@ -62,15 +62,15 @@ class LoginActivity : AppCompatActivity() {
                 t.printStackTrace()
             }
             override fun onResponse(call: Call<AccessToken?>, response: Response<AccessToken?>) {
-                token = response.body()!!.accessToken
-                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                intent.putExtra("token", token)
-                startActivity(intent)
-                finish()
+                token = response.body()?.accessToken?: ""
+                if (token != "") {
+                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    intent.putExtra("token", token)
+                    startActivity(intent)
+                    finish()
+                }
             }
         })
-
-
     }
 
 }

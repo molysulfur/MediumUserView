@@ -1,23 +1,18 @@
 package com.example.molys.mediumuserviewapplication.holder
 
-import android.content.Intent
-import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.example.molys.mediumuserviewapplication.R
 import com.example.molys.mediumuserviewapplication.items.ProfileItem
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.layout_profile.imgProfile
+import kotlinx.android.synthetic.main.layout_profile.tvName
+import kotlinx.android.synthetic.main.layout_profile.tvUsername
 
-class ProfileHolder(val view : View) : RecyclerView.ViewHolder(view){
-    private val imgProfile : ImageView = view.findViewById(R.id.img_profile)
-    private val tvUsername : TextView = view.findViewById(R.id.tv_username)
-    private val tvName : TextView = view.findViewById(R.id.tv_name)
+class ProfileHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),LayoutContainer{
 
     fun onBind(profile: ProfileItem){
-        Glide.with(view.context).load(profile.imageUrl).into(imgProfile)
+        Glide.with(containerView.context).load(profile.imageUrl).into(imgProfile)
         tvUsername.text = profile.username
         tvName.text = profile.name
     }
