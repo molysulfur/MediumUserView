@@ -3,28 +3,64 @@ package com.example.molys.mediumuserviewapplication
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.widget.Toast
 import com.example.molys.mediumuserviewapplication.adapter.MediumAdapter
-import com.example.molys.mediumuserviewapplication.data.*
+import com.example.molys.mediumuserviewapplication.data.DataProfile
+import com.example.molys.mediumuserviewapplication.data.DataPublication
+import com.example.molys.mediumuserviewapplication.data.Profile
+import com.example.molys.mediumuserviewapplication.data.Publication
 import com.example.molys.mediumuserviewapplication.service.MediumService
+import io.reactivex.Observable
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import org.parceler.Parcels
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
     private val SAVE_PROFLIE = "SAVE_PROFLIE"
     private val SAVE_PUBLICATION = "SAVE_PUBLICATION"
     private var token = ""
-    private val BASE_URL = "https://api.medium.com/v1/"
     private var userId = ""
+    private var disposable : Disposable? = null
     private var listPublication = ArrayList<Publication>()
     private lateinit var userProfile: Profile
     private lateinit var callService: MediumService
+
+    private val profileObserver = object : Observer<DataProfile> {
+        override fun onComplete() {
+        }
+
+        override fun onSubscribe(d: Disposable) {
+        }
+
+        override fun onNext(profile: DataProfile) {
+            userId = profile.data?.id ?: ""
+            userProfile = profile.data ?: Profile()
+            getPublication().subscribe(publicationObserver)
+        }
+
+        override fun onError(e: Throwable) {
+        }
+    }
+
+    private val publicationObserver = object : Observer<DataPublication> {
+        override fun onComplete() {
+        }
+
+        override fun onSubscribe(d: Disposable) {
+        }
+
+        override fun onNext(dataPublication: DataPublication) {
+            dataPublication.data?.forEach { publication ->
+                isEditorOrWriter(publication)
+            }
+        }
+
+        override fun onError(e: Throwable) {
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,60 +88,44 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     private fun init() {
         token = "Bearer " + intent.getStringExtra("token")
-        val retrofit = Retrofit.Builder().baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        callService = retrofit.create(MediumService::class.java)
-        callService.getProfile(token).enqueue(object : Callback<DataProfile?> {
-            override fun onFailure(call: Call<DataProfile?>, t: Throwable) {
-                t.printStackTrace()
-                Toast.makeText(this@MainActivity, "Error for Get Profile", Toast.LENGTH_SHORT).show()
-            }
+        callService = MediumService.getMediumService()
 
-            override fun onResponse(call: Call<DataProfile?>, response: Response<DataProfile?>) {
-                userId = response.body()?.data?.id ?: ""
-                userProfile = response.body()?.data ?: Profile()
-                getPublication()
-            }
-        })
+        callService.getProfile(token)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(profileObserver)
     }
 
-    private fun getPublication() {
-        callService.getPublicationsWithClientId(token, userId).enqueue(object : Callback<DataPublication?> {
-            override fun onFailure(call: Call<DataPublication?>, t: Throwable) {
-                t.printStackTrace()
-                Toast.makeText(this@MainActivity, "Error for Get Publication", Toast.LENGTH_LONG).show()
-            }
-
-            override fun onResponse(call: Call<DataPublication?>, response: Response<DataPublication?>) {
-                response.body()?.data?.forEach {
-                    isEditorOrWriter(it)
-                }
-            }
-        })
+    private fun getPublication(): Observable<DataPublication> {
+        return callService.getPublicationsWithClientId(token, userId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     private fun isEditorOrWriter(publication: Publication) {
-        callService.getPublicationWithId(token, publication.id).enqueue(object : Callback<DataContributors?> {
-            override fun onFailure(call: Call<DataContributors?>, t: Throwable) {
-                t.printStackTrace()
-                Toast.makeText(this@MainActivity, "Error for Get Contributor", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onResponse(call: Call<DataContributors?>, response: Response<DataContributors?>) {
-                response.body()?.data?.forEach {
-                    if (it.userId == userId) {
+        disposable = callService.getPublicationWithId(token, publication.id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnNext { contributors ->
+                contributors.data?.forEach { contributor ->
+                    if (contributor.userId == userId) {
                         listPublication.add(publication)
-                    }
-                    recyclerMain.apply {
-                        layoutManager = LinearLayoutManager(this@MainActivity)
-                        adapter = MediumAdapter(MediumCreator.toBaseItem(userProfile, listPublication))
                     }
                 }
             }
-        })
+            .doOnComplete {
+                recyclerMain.apply {
+                    layoutManager = LinearLayoutManager(this@MainActivity)
+                    adapter = MediumAdapter(MediumCreator.toBaseItem(userProfile, listPublication))
+                }
+            }
+            .subscribe()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable?.dispose()
     }
 }

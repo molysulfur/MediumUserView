@@ -4,23 +4,17 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.example.molys.mediumuserviewapplication.data.AccessToken
 import com.example.molys.mediumuserviewapplication.service.MediumService
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class LoginActivity : AppCompatActivity() {
 
-    private val CLIENT_ID = "46e13914780c"
-    private val CLIENT_SECRET = "127218d26fd1c38485fd347c48289c3471933795"
-    private val REDIRECT_URI = "molysulfur://callback"
-    private val BASE_URL = "https://api.medium.com/v1/"
-    private val GRANT_TYPE = "authorization_code"
-    private var token: String = ""
+    private var disposable  : Disposable? = null
+    private var code : String = ""
+    private lateinit var activityIntent : Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,45 +26,38 @@ class LoginActivity : AppCompatActivity() {
 
     private fun init() {
         if (intent.data != null) {
-            getAuthToken()
-        } else {
-            btnLogin.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data =
-                        Uri.parse("https://medium.com/m/oauth/authorize?client_id=$CLIENT_ID&scope=basicProfile,publishPost&state=200&response_type=code&redirect_uri=$REDIRECT_URI")
-                startActivity(intent)
+            getAccessTokenWithCode()
+        }
+        btnLogin.setOnClickListener {
+            activityIntent = Intent(Intent.ACTION_VIEW)
+            activityIntent.data = Uri.parse("https://medium.com/m/oauth/authorize?client_id=${MediumService.CLIENT_ID}&scope=basicProfile,publishPost&state=200&response_type=code&redirect_uri=${MediumService.REDIRECT_URI}")
+            startActivity(activityIntent)
+        }
+    }
+
+    private fun getAccessTokenWithCode() {
+        val uri = intent.data
+        code = uri!!.getQueryParameter("code")?:""
+        disposable = MediumService.getMediumService()
+            .getAccessToken(
+                code, MediumService.CLIENT_ID,
+                MediumService.CLIENT_SECRET,
+                MediumService.GRANT_TYPE,
+                MediumService.REDIRECT_URI
+            ).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+            if (it != null){
+                activityIntent = Intent(this,MainActivity::class.java)
+                activityIntent.putExtra("token",it.accessToken)
+                startActivity(activityIntent)
             }
         }
     }
 
-    private fun getAuthToken() {
-        val uri = intent.data
-        val code = uri!!.getQueryParameter("code")!!
-
-        val retrofit = Retrofit.Builder().baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val accessTokenService = retrofit.create(MediumService::class.java)
-            .getAccessToken(
-                code, CLIENT_ID,
-                CLIENT_SECRET,
-                GRANT_TYPE,
-                REDIRECT_URI
-            )
-        accessTokenService.enqueue(object : Callback<AccessToken?> {
-            override fun onFailure(call: Call<AccessToken?>, t: Throwable) {
-                t.printStackTrace()
-            }
-            override fun onResponse(call: Call<AccessToken?>, response: Response<AccessToken?>) {
-                token = response.body()?.accessToken?: ""
-                if (token != "") {
-                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                    intent.putExtra("token", token)
-                    startActivity(intent)
-                    finish()
-                }
-            }
-        })
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable?.dispose()
     }
 
 }
