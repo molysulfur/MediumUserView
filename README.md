@@ -6,6 +6,8 @@ MediumUserView is moblie application. using oauth for get json api from medium f
 * [Retrofit](https://square.github.io/retrofit/) for call api
 * [circleimageview](https://github.com/hdodenhof/CircleImageView) for set image view like a circle
 * [medium-api-docs](https://github.com/Medium/medium-api-docs) for Authentication and get json data to this application
+* [Rxjava](https://github.com/ReactiveX/RxJava) is a library for composing asynchronous
+* [RxAndroid](https://github.com/ReactiveX/RxAndroid) for provides on the main thread or any
 
 # Screenshots
 ![1](https://user-images.githubusercontent.com/40534697/50953663-b1d3eb80-14e6-11e9-8f3a-dd3756c720bd.PNG)
